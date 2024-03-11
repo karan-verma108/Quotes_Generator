@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quotes Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .quotesBox {
+            padding: 4rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            background: linear-gradient(skyblue, pink, blue);
+            border-radius: 8px;
+            border: none;
+        }
+
+        button {
+            padding: 10px 0px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        #btn:hover {
+            background-color: #2d22f5;
+            color: white;
+
+        }
+
+        #tweet:hover {
+            background-color: #9fcce5;
+        }
+
+        #quote {
+            font-size: 1.7rem;
+        }
+
+        #author {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="quotesBox">
+        <div id="quote"></div>
+        <div id="author"></div>
+        <button id="btn">get quote</button>
+        <button id="tweet">tweet</button>
+    </div>
+
+    <script>
+
+        let btn = document.getElementById('btn');
+        let tweet = document.getElementById('tweet');
+        let quote = document.getElementById('quote');
+        let author = document.getElementById('author');
+        let realData = '';
+
+        const goToTwitter = () => {
+            let tweetPost = `https://twitter.com/intent/post?text=${realData.text}`;
+            window.open(tweetPost);
+        }
+
+        const generateRandomQuote = () => {
+            let rndNum = Math.floor(Math.random() * 17);
+            quote.innerHTML = `<strong>${realData[rndNum].text}</strong>`;
+            author.innerHTML = `by <em>${realData[rndNum].author}</em>`;
+        }
+
+
+        const getQuotes = async () => {
+            const api = `https://type.fit/api/quotes`;
+            try {
+                let data = await fetch(api);
+                realData = await data.json();
+                generateRandomQuote();
+            } catch (error) {
+                console.error(error)
+            }
+        }
+
+        btn.addEventListener('click', generateRandomQuote);
+        tweet.addEventListener('click', goToTwitter);
+
+
+        getQuotes();
+
+    </script>
+</body>
+
+</html>
